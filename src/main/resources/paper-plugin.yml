@@ -1,7 +1,12 @@
 name: Obsidian Gate
 version: '1.0'
-main: net.tokishu.obsidianGate
+main: net.tokishu.ObsidianGate
 api-version: '1.21'
 prefix: obsidian-gate
 authors: [ Tokishu ]
 website: https://tokishu.net
+commands:
+  obsidian:
+    description: command for administrators
+    usage: "/obsidian help"
+    aliases: [help, relink, unlink, autonick, links]

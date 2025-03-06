@@ -1,202 +1,206 @@
-  # -------------------------------------------------------
-  #          Welcome to the Obsidian Gate Config!
-  # -------------------------------------------------------
-  # This configuration file allows you to customize the
-  # behavior and settings of the Obsidian Gate plugin.
-  #
-  # Need help? Visit our documentation or support page:
-  # https://obsidian.tokishu.net/
-  #
-  # Happy customizing!
-  # -------------------------------------------------------
+# -------------------------------------------------------
+#          Welcome to the ObsidianGate Config!
+# -------------------------------------------------------
+# This configuration file allows you to customize the
+# behavior and settings of the ObsidianGate plugin.
+# ObsidianGate synchronizes Minecraft and Discord accounts,
+# offers automated nickname updates, two-factor authentication, and more.
+# 
+# Need help? Visit our documentation or support page:
+# https://obsidian.plushy.network/
+# 
+# Happy customizing!
+# -------------------------------------------------------
 
 
-  # -------------------[Language Settings]-------------------
-  # The language used by the plugin.
-  # Available options:
-  #   - english
-  #   - russian
-  # If an invalid or unsupported language is specified,
-  # the plugin will default to 'english'.
-  language: "english"
+# -------------------[Language Settings]-------------------
+# The language used by the plugin.
+# Available options:
+#   - english
+#   - russian
+# If an invalid or unsupported language is specified,
+# the plugin will default to 'english'.
+language: "english"
 
 
-  # -------------------[Discord Settings]-------------------
-  # Configure the discord bot settings so that the server has a connection to your discord server(s).
+# -------------------[Discord Settings]-------------------
+# Configure the Discord bot settings to link your server
+# with your Discord community for account synchronization.
 
-  # Discord Token
-  # The token by which the server will have access to discord users.
-  # Until the parameter is set and the bot is not authorized, the plugin will not work.
-  # Default: "PASTE TOKEN HERE"
+# Discord Token
+# The token required for bot authorization. The plugin will
+# not function until the bot is authorized.
+# Default: "PASTE TOKEN HERE"
+discord-token: "PASTE TOKEN HERE"
 
-  max-active-cats-per-player: "PASTE TOKEN HERE"
+# Main Guild ID
+# The ID of your main Discord server (the primary guild).
+# This is required for syncing roles and sending notifications.
+main-guild-id: "PASTE MAIN GUILD ID HERE"
 
-  # Radius in which cats remain active. If no players are within this
-  # radius, the cat's AI will be disabled, and the cat will become
-  # invulnerable and immobile until a player approaches.
-  # Set to 0 to keep cats active at all times.
-  # Default: 250
-  inactive-radius: 250
+# Allow Bot on Other Servers
+# Enable the bot to be added to other Discord servers.
+# It will automatically sync nicknames of linked players.
+# Useful if players create community servers.
+# Default: false
+allow-bot-on-other-servers: false
 
-  # Interval (in seconds) for checking optimization conditions.
-  # This parameter is mandatory and cannot be disabled.
-  # Default: 10
-  optimization-check-interval: 10
+# Verify Role Assignment
+# Should the bot automatically assign a "verified" role to linked users?
+# Default: false
+assign-verified-role: false
 
-
-  # -------------------[Cat AI & Mechanics]-------------------
-  #
-  # Below you will find various configurations to fine-tune
-  # the cat behavior, such as stealing, fear of water,
-  # hunting, and more. Adjust these settings carefully
-  # for the best gameplay experience.
-  #
-
-
-  # Configure the behavior of the AI system for stray and tamed cats.
-  # Available options:
-  #   - disabled: Completely disables the plugin and all custom AI.
-  #   - tamed-only: Stray cats use vanilla AI until tamed. Tamed cats will use the custom AI.
-  #   - all: All cats, including stray and tamed, will use the custom AI.
-  # Default: all
-  cat-ai-mode: "all"
+# Verified Role ID
+# The Discord role ID to assign when a player links their account.
+verified-role-id: "PASTE VERIFIED ROLE ID HERE"
 
 
-  ## ----[Stealing Settings]----
-  # Configure whether cats can steal items from containers or pick them up from the ground.
-  # Also includes cooldowns, item lists, and logging options.
+# -------------------[Account Synchronization]-------------------
+# Manage account linking, automatic relinking, and nickname updates.
 
-  # Enable or disable the stealing feature entirely.
-  # If set to false, all stealing-related settings below are ignored.
-  # Default: true
-  stealing-enabled: true
-
-  # Cooldown (in seconds) before the same cat can steal again from a container.
-  # Default: 10800 (3 hours)
-  stealing-cooldown-seconds: 10800
-
-  # List of possible items that cats can steal from containers.
-  # Default: various raw fish (excluding pufferfish), items that vanilla cats bring to players
-  # after sleeping, and all colors of wool blocks. Adjust to your liking.
-  stealing-items:
-    - "minecraft:cod"
-    - "minecraft:salmon"
-    - "minecraft:string"
-    - "minecraft:white_wool"
-    - "minecraft:orange_wool"
-    - "minecraft:magenta_wool"
-    - "minecraft:light_blue_wool"
-    - "minecraft:yellow_wool"
-    - "minecraft:lime_wool"
-    - "minecraft:pink_wool"
-    - "minecraft:gray_wool"
-    - "minecraft:light_gray_wool"
-    - "minecraft:cyan_wool"
-    - "minecraft:purple_wool"
-    - "minecraft:blue_wool"
-    - "minecraft:brown_wool"
-    - "minecraft:green_wool"
-    - "minecraft:red_wool"
-    - "minecraft:black_wool"
-
-  # Allow stray (street) cats to steal from containers?
-  # If set to false, only tamed cats can steal.
-  # Default: false
-  street-cats-can-steal: false
-
-  # Allow cats to pick up items from the ground?
-  # Default: true
-  steal-from-ground: true
-
-  # Cooldown (in seconds) before the same cat can steal again from the ground.
-  # Only used if 'steal-from-ground' is enabled.
-  # Default: 10800 (3 hours)
-  steal-from-ground-cooldown-seconds: 10800
-
-  # Enable retrieval of a stolen item by interacting with the cat (right-click).
-  # If set to false, owners cannot manually take stolen items away from their cats.
-  # Default: true
-  stolen-item-retrieval-enabled: true
-
-  # Should stealing attempts be logged via CoreProtect?
-  # If CoreProtect is not installed, these logs will be skipped automatically.
-  # Default: true
-  stealing-coreprotect-logging: true
-
-  # Should cats play with the stolen item?
-  # If enabled, cats will push it around and swirl around it.
-  # Default: true
-  cat-plays-with-stolen-item: true
+# Enable or disable automatic relinking when a player changes their nickname.
+# This will ONLY work if 'online-mode' is enabled, as it relies on UUID tracking.
+# When a player's UUID remains the same but their username changes,
+# the plugin will detect the new name and update it in Discord.
+# ⚠️ IMPORTANT: This function works only on licensed servers!
+# It will NOT work if 'online-mode' is set to false.
+# Default: true
+auto-relink-on-nickname-change: true
 
 
-  ## ----[Fear of Water Settings]----
-  # Configure whether cats are afraid of water, and how they behave during rain.
+# Whitelist Settings
+# Configure how the plugin interacts with your whitelist.
+# Supports vanilla, EasyWhitelist, or a custom command.
+whitelist:
+    enabled: false # Does the plugin manage the whitelist?
+    type: "vanilla" # Options: vanilla, custom
+    add-command: "whitelist add {username}" # Command to add a player (no /)
+    remove-command: "whitelist remove {username}" # Command to remove a player (no /)
 
-  # Probability (0.0 to 1.0) that a cat will be afraid of water.
-  # For example, 0.9 means a 90% chance to fear water.
-  # Default: 0.9
-  cat-fear-water-chance: 0.9
-
-  # If a cat is afraid of water, should it run for shelter when it starts raining?
-  # Default: true
-  cat-runs-for-cover-when-raining: true
-
-
-  ## ----[Hunting Settings]----
-  # Configure whether cats hunt specific entities, and how they behave near water.
-
-  # Enable or disable the hunting feature entirely.
-  # If set to false, cats will not hunt any entities.
-  # Default: true
-  cat-hunting-enabled: true
-
-  # List of entity types that cats are allowed to hunt.
-  # By default, cats do not hunt players (instant kill logic is disabled for players).
-  # Example: chicken, bat, salmon, cod, etc.
-  cat-hunting-entities:
-    - "minecraft:chicken"
-    - "minecraft:bat"
-    - "minecraft:cod"
-    - "minecraft:salmon"
-
-  # If the cat is not afraid of water, allow it to hunt fish in rivers or oceans.
-  # This only applies if 'cat-hunting-enabled' is true.
-  # Default: true
-  cat-hunt-fish-in-water: true
+# Discord Link Requirement
+# Should players be required to link their Discord account?
+# Default: false
+require-discord-link: false
 
 
-  # -------------------[Action Display Settings]-------------------
-  #
-  # Configure how cat actions are displayed to players. If set to show,
-  # messages (like "*Plays with a found item*") will be visible in chat
-  # or on hover. Actual texts can be adjusted in your localization files.
+# -------------------[Security & 2FA]-------------------
+# Secure logins with two-factor authentication.
 
-  # Display a message when the cat plays with a found or stolen item?
-  # Default: true
-  display-cat-play: true
+# Enable Two-Factor Authentication (2FA) for all players.
+# Default: false
+enable-2fa: false
 
-  # Display a message when the cat hunts something?
-  # Default: true
-  display-cat-hunt: true
+# 2FA Mode
+# Configure when 2FA is triggered.
+# Options: always, location-change, ip-change
+# Default: location-change
+2fa-mode: "location-change"
 
-  # Display a message when the cat is sleeping on a bed?
-  # Default: true
-  display-cat-sleep: true
+# Require 2FA to Play
+# Should players be forced to set up 2FA before they can play?
+# Default: false
+require-2fa: false
 
-  # Always show cat action messages to nearby players?
-  # If set to false, these messages are only shown when a player hovers
-  # over the cat (requires a compatible chat or tooltip system).
-  # Default: false
-  always-show-cat-actions: false
+# 2FA Expiry Time (in seconds)
+# How long the 2FA code remains valid.
+# Default: 300 (5 minutes)
+2fa-expiry-time: 300
+
+# How 2FA Works:
+# When a player logs in, they will receive a message asking
+# them to confirm their login through a button in Discord.
+# Until confirmation, they won’t be able to move or interact.
 
 
-  # -------------------[CoreProtect Integration]-------------------
-  # By default, any relevant actions (such as stealing) will be logged
-  # to CoreProtect if it is installed. If CoreProtect is not present,
-  # these logs are simply ignored. There is no need to disable them
-  # explicitly here.
-  #
-  # Additional logging options can be added below in the future if needed.
-  #
-  # Example warning: If 'stealing-coreprotect-logging' is set to false,
-  # cat theft events will NOT be recorded, even if CoreProtect is present.
+# -------------------[Database Settings]-------------------
+# Configure SQL connection settings for storing linked accounts.
+# This section supports MySQL, PostgreSQL, and SQLite.
+
+database:
+    # Type of the database. Options: mysql, postgres, sqlite
+    # Default: mysql
+    type: "mysql"
+
+    # Hostname of the database server.
+    # Default: localhost
+    host: "localhost"
+
+    # Port number for the database connection.
+    # MySQL default: 3306
+    # PostgreSQL default: 5432
+    # SQLite does not require a port.
+    port: 3306
+
+    # Name of the database to connect to.
+    # Default: obsidiangate
+    name: "obsidiangate"
+
+    # Username to connect to the database.
+    # Default: root
+    user: "root"
+
+    # Password for the database user.
+    # Default: password
+    password: "password"
+
+    # Prefix for the tables. Useful for multi-server setups or database segmentation.
+    # Default: OG_
+    prefix: "OG_"
+
+    # SQLite-specific configuration:
+    # SQLite file path (only needed if the database type is set to sqlite).
+    # Default: "obsidiangate.db"
+    sqlite-path: "obsidiangate.db"
+
+# -------------------[API & Developer Options]-------------------
+# Configure how the plugin interacts with external services or other plugins.
+# Need help with api? Visit our documentation or support page:
+# https://obsidian.plushy.network/api/
+#
+
+# Enable external API access for custom bots or web panels.
+# Default: false
+enable-api: false
+
+# Server IP & Port
+# Specify the server IP and port for API requests.
+server-ip: "0.0.0.0"
+api-port: 8080
+
+# API Key
+# The key required for accessing the API.
+api-key: "GENERATE_KEY_HERE" # API key was generated by plugin
+
+
+# -------------------[Role Automation]-------------------
+# Automate role management with LuckPerms.
+
+# Enable Role Sync
+# Sync Minecraft ranks with Discord roles based on player groups.
+# Requires LuckPerms for Minecraft permissions.
+# Default: true
+role-sync:
+    enable: false
+    roles:
+        admin: "Admin Role ID"
+        moderator: "Moderator Role ID"
+        vip: "VIP Role ID"
+
+
+# -------------------[Notifications & Logging]-------------------
+# Configure notifications for account events and server activity.
+
+# Notify Discord when a player joins or leaves the server.
+# Default: true
+join-leave-notifications: true
+
+# Log nickname changes to Discord.
+# Default: true
+log-nickname-changes: true
+
+# -------------------------------------------------------
+#                    End of Configuration
+# -------------------------------------------------------
+# Save and reload the server for changes to take effect.
+# Enjoy using ObsidianGate! 🚀
+# -------------------------------------------------------
