@@ -1,0 +1,202 @@
+  # -------------------------------------------------------
+  #          Welcome to the Obsidian Gate Config!
+  # -------------------------------------------------------
+  # This configuration file allows you to customize the
+  # behavior and settings of the Obsidian Gate plugin.
+  #
+  # Need help? Visit our documentation or support page:
+  # https://obsidian.tokishu.net/
+  #
+  # Happy customizing!
+  # -------------------------------------------------------
+
+
+  # -------------------[Language Settings]-------------------
+  # The language used by the plugin.
+  # Available options:
+  #   - english
+  #   - russian
+  # If an invalid or unsupported language is specified,
+  # the plugin will default to 'english'.
+  language: "english"
+
+
+  # -------------------[Discord Settings]-------------------
+  # Configure the discord bot settings so that the server has a connection to your discord server(s).
+
+  # Discord Token
+  # The token by which the server will have access to discord users.
+  # Until the parameter is set and the bot is not authorized, the plugin will not work.
+  # Default: "PASTE TOKEN HERE"
+
+  max-active-cats-per-player: "PASTE TOKEN HERE"
+
+  # Radius in which cats remain active. If no players are within this
+  # radius, the cat's AI will be disabled, and the cat will become
+  # invulnerable and immobile until a player approaches.
+  # Set to 0 to keep cats active at all times.
+  # Default: 250
+  inactive-radius: 250
+
+  # Interval (in seconds) for checking optimization conditions.
+  # This parameter is mandatory and cannot be disabled.
+  # Default: 10
+  optimization-check-interval: 10
+
+
+  # -------------------[Cat AI & Mechanics]-------------------
+  #
+  # Below you will find various configurations to fine-tune
+  # the cat behavior, such as stealing, fear of water,
+  # hunting, and more. Adjust these settings carefully
+  # for the best gameplay experience.
+  #
+
+
+  # Configure the behavior of the AI system for stray and tamed cats.
+  # Available options:
+  #   - disabled: Completely disables the plugin and all custom AI.
+  #   - tamed-only: Stray cats use vanilla AI until tamed. Tamed cats will use the custom AI.
+  #   - all: All cats, including stray and tamed, will use the custom AI.
+  # Default: all
+  cat-ai-mode: "all"
+
+
+  ## ----[Stealing Settings]----
+  # Configure whether cats can steal items from containers or pick them up from the ground.
+  # Also includes cooldowns, item lists, and logging options.
+
+  # Enable or disable the stealing feature entirely.
+  # If set to false, all stealing-related settings below are ignored.
+  # Default: true
+  stealing-enabled: true
+
+  # Cooldown (in seconds) before the same cat can steal again from a container.
+  # Default: 10800 (3 hours)
+  stealing-cooldown-seconds: 10800
+
+  # List of possible items that cats can steal from containers.
+  # Default: various raw fish (excluding pufferfish), items that vanilla cats bring to players
+  # after sleeping, and all colors of wool blocks. Adjust to your liking.
+  stealing-items:
+    - "minecraft:cod"
+    - "minecraft:salmon"
+    - "minecraft:string"
+    - "minecraft:white_wool"
+    - "minecraft:orange_wool"
+    - "minecraft:magenta_wool"
+    - "minecraft:light_blue_wool"
+    - "minecraft:yellow_wool"
+    - "minecraft:lime_wool"
+    - "minecraft:pink_wool"
+    - "minecraft:gray_wool"
+    - "minecraft:light_gray_wool"
+    - "minecraft:cyan_wool"
+    - "minecraft:purple_wool"
+    - "minecraft:blue_wool"
+    - "minecraft:brown_wool"
+    - "minecraft:green_wool"
+    - "minecraft:red_wool"
+    - "minecraft:black_wool"
+
+  # Allow stray (street) cats to steal from containers?
+  # If set to false, only tamed cats can steal.
+  # Default: false
+  street-cats-can-steal: false
+
+  # Allow cats to pick up items from the ground?
+  # Default: true
+  steal-from-ground: true
+
+  # Cooldown (in seconds) before the same cat can steal again from the ground.
+  # Only used if 'steal-from-ground' is enabled.
+  # Default: 10800 (3 hours)
+  steal-from-ground-cooldown-seconds: 10800
+
+  # Enable retrieval of a stolen item by interacting with the cat (right-click).
+  # If set to false, owners cannot manually take stolen items away from their cats.
+  # Default: true
+  stolen-item-retrieval-enabled: true
+
+  # Should stealing attempts be logged via CoreProtect?
+  # If CoreProtect is not installed, these logs will be skipped automatically.
+  # Default: true
+  stealing-coreprotect-logging: true
+
+  # Should cats play with the stolen item?
+  # If enabled, cats will push it around and swirl around it.
+  # Default: true
+  cat-plays-with-stolen-item: true
+
+
+  ## ----[Fear of Water Settings]----
+  # Configure whether cats are afraid of water, and how they behave during rain.
+
+  # Probability (0.0 to 1.0) that a cat will be afraid of water.
+  # For example, 0.9 means a 90% chance to fear water.
+  # Default: 0.9
+  cat-fear-water-chance: 0.9
+
+  # If a cat is afraid of water, should it run for shelter when it starts raining?
+  # Default: true
+  cat-runs-for-cover-when-raining: true
+
+
+  ## ----[Hunting Settings]----
+  # Configure whether cats hunt specific entities, and how they behave near water.
+
+  # Enable or disable the hunting feature entirely.
+  # If set to false, cats will not hunt any entities.
+  # Default: true
+  cat-hunting-enabled: true
+
+  # List of entity types that cats are allowed to hunt.
+  # By default, cats do not hunt players (instant kill logic is disabled for players).
+  # Example: chicken, bat, salmon, cod, etc.
+  cat-hunting-entities:
+    - "minecraft:chicken"
+    - "minecraft:bat"
+    - "minecraft:cod"
+    - "minecraft:salmon"
+
+  # If the cat is not afraid of water, allow it to hunt fish in rivers or oceans.
+  # This only applies if 'cat-hunting-enabled' is true.
+  # Default: true
+  cat-hunt-fish-in-water: true
+
+
+  # -------------------[Action Display Settings]-------------------
+  #
+  # Configure how cat actions are displayed to players. If set to show,
+  # messages (like "*Plays with a found item*") will be visible in chat
+  # or on hover. Actual texts can be adjusted in your localization files.
+
+  # Display a message when the cat plays with a found or stolen item?
+  # Default: true
+  display-cat-play: true
+
+  # Display a message when the cat hunts something?
+  # Default: true
+  display-cat-hunt: true
+
+  # Display a message when the cat is sleeping on a bed?
+  # Default: true
+  display-cat-sleep: true
+
+  # Always show cat action messages to nearby players?
+  # If set to false, these messages are only shown when a player hovers
+  # over the cat (requires a compatible chat or tooltip system).
+  # Default: false
+  always-show-cat-actions: false
+
+
+  # -------------------[CoreProtect Integration]-------------------
+  # By default, any relevant actions (such as stealing) will be logged
+  # to CoreProtect if it is installed. If CoreProtect is not present,
+  # these logs are simply ignored. There is no need to disable them
+  # explicitly here.
+  #
+  # Additional logging options can be added below in the future if needed.
+  #
+  # Example warning: If 'stealing-coreprotect-logging' is set to false,
+  # cat theft events will NOT be recorded, even if CoreProtect is present.
