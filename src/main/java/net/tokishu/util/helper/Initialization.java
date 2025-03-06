@@ -28,12 +28,14 @@ public class Initialization {
                 "2fa-mode",
                 "require-2fa",
                 "2fa-expiry-time",
+                "database.type",
                 "database.host",
                 "database.port",
                 "database.name",
                 "database.user",
                 "database.password",
                 "database.prefix",
+                "database.sqlite-path",
                 "enable-api",
                 "server-ip",
                 "api-port",
@@ -45,6 +47,7 @@ public class Initialization {
                 "join-leave-notifications",
                 "log-nickname-changes"
         );
+
 
         for (String key : requiredKeys) {
             if (!config.contains(key)) {
