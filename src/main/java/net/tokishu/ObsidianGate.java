@@ -1,8 +1,10 @@
 package net.tokishu;
 
 import net.tokishu.util.helper.ApiKey;
+import net.tokishu.util.helper.DataBase;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.tokishu.util.helper.Initialization.checkConfigIntegrity;
 
@@ -25,6 +27,15 @@ public final class ObsidianGate extends JavaPlugin {
             saveConfig();
             getLogger().info("API-Key generated!");
         }
+
+        DataBase database = DataBase.getInstance();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                database.cleanupExpiredCodes();
+            }
+        }.runTaskTimerAsynchronously(this, 20 * 60, 20 * 60 * 3); // 3 minutes
 
         getLogger().info("ObsidianGate launched successfully!");
     }

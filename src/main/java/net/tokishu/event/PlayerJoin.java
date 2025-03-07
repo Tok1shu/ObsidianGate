@@ -1,4 +1,4 @@
-package net.tokishu.events;
+package net.tokishu.event;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import net.tokishu.ObsidianGate;
 
-public class playerJoin implements Listener {
+public class PlayerJoin implements Listener {
     private ObsidianGate plugin;
 
     @EventHandler(priority = EventPriority.HIGHEST)

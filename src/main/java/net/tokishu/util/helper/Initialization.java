@@ -1,12 +1,11 @@
 package net.tokishu.util.helper;
-import static org.bukkit.Bukkit.getLogger;
 import net.tokishu.ObsidianGate;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 
 public class Initialization {
-    private ObsidianGate plugin;
+    private static ObsidianGate plugin;
 
     public static boolean checkConfigIntegrity() {
         FileConfiguration config = ObsidianGate.getPluginConfig();
@@ -51,17 +50,17 @@ public class Initialization {
 
         for (String key : requiredKeys) {
             if (!config.contains(key)) {
-                getLogger().info("Missing key: " + key);
+                plugin.getLogger().info("Missing key: " + key);
                 return false;
             }
 
             String value = config.getString(key);
             if (value == null || value.trim().isEmpty()) {
-                getLogger().warning("Empty value for key: " + key);
+                plugin.getLogger().warning("Empty value for key: " + key);
             }
         }
 
-        getLogger().info("Configuration integrity check passed.");
+        plugin.getLogger().info("Configuration integrity check passed.");
         return true;
     }
 }
