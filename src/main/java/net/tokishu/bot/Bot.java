@@ -6,12 +6,23 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.tokishu.util.Base;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class Main extends Base {
+public class Bot extends Base {
 
+    private static Bot instance;
     private JDA bot;
 
+    public Bot() {
+        instance = this;
+    }
+
+    public static Bot getInstance() {
+        return instance;
+    }
+
     public void startBot() {
+        FileConfiguration config = plugin.getConfig();
         String token = config.getString("discord-token");
 
         if (token == null || token.isEmpty()) {
@@ -24,17 +35,24 @@ public class Main extends Base {
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(new DiscordListener())
                     .build();
-            plugin.getLogger().info("Discord bot started!");
+
+            plugin.getLogger().info("[Bot] Discord bot started!");
         } catch (Exception e) {
-            plugin.getLogger().severe("Failed to start Discord bot: " + e.getMessage());
+            plugin.getLogger().severe("[Bot] Failed to start Discord bot: " + e.getMessage());
         }
     }
 
     public void stopBot() {
         if (bot != null) {
             bot.shutdown();
-            plugin.getLogger().info("Discord bot stopped.");
+            plugin.getLogger().info("[Bot] Discord bot stopped.");
         }
+    }
+
+    public void restartBot() {
+        stopBot();
+        startBot();
+        plugin.getLogger().info("[Bot] Discord bot restarted!");
     }
 
     private static class DiscordListener extends ListenerAdapter {
@@ -47,5 +65,9 @@ public class Main extends Base {
                 event.getChannel().sendMessage("Pong!").queue();
             }
         }
+    }
+
+    public JDA getBot() {
+        return bot;
     }
 }

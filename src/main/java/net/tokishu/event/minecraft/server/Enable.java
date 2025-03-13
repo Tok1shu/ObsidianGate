@@ -1,23 +1,23 @@
 package net.tokishu.event.minecraft.server;
 
-import net.tokishu.bot.Main;
+import net.tokishu.bot.Bot;
 import net.tokishu.event.minecraft.player.Join;
 import net.tokishu.util.Base;
-import net.tokishu.util.helper.DataBase;
-import net.tokishu.util.helper.ApiKey;
+import net.tokishu.util.helper.database.Manager;
+import net.tokishu.util.helper.config.ApiKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import static net.tokishu.util.helper.Initialization.checkConfigIntegrity;
+import static net.tokishu.util.helper.config.Initialization.checkConfigIntegrity;
 
 public class Enable extends Base {
 
     public Enable() {
         initialize();
         registerListeners();
-        new Main().startBot();
+        new Bot().startBot();
     }
 
     private void initialize() {
@@ -47,7 +47,7 @@ public class Enable extends Base {
             return;
         }
 
-        DataBase database = DataBase.getInstance();
+        Manager database = Manager.getInstance();
 
         new BukkitRunnable() {
             @Override

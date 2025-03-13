@@ -1,4 +1,4 @@
-package net.tokishu.util.helper;
+package net.tokishu.util.helper.config;
 import net.tokishu.util.Base;
 
 import java.util.HashMap;
@@ -275,9 +275,6 @@ public class Initialization extends Base {
         return isValid;
     }
 
-    /**
-     * Helper class to store validation pattern and error message
-     */
     private static class ConfigValidator {
         final String pattern;
         final String errorMessage;

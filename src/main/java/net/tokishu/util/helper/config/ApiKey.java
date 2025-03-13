@@ -1,8 +1,6 @@
-package net.tokishu.util.helper;
+package net.tokishu.util.helper.config;
 
-import net.tokishu.ObsidianGate;
 import net.tokishu.util.Base;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
 import java.security.SecureRandom;

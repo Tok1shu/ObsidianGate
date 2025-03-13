@@ -1,4 +1,4 @@
-package net.tokishu.util.helper;
+package net.tokishu.util.helper.database;
 
 import net.tokishu.util.Base;
 
@@ -7,41 +7,41 @@ import java.sql.*;
 import java.time.Instant;
 import java.util.Random;
 
-public class DataBase extends Base {
+public class Manager extends Base {
 
-    private static DataBase instance;
+    private static Manager instance;
     private static Connection connection;
-    private final String dbType;
+    private static String dbType = "";
     private final String host;
     private final String database;
     private final String user;
     private final String password;
     private static String prefix = "";
     private final int port;
-    private final String sqliteFileName;
     private final String sqliteFullPath;
-    private final int codeExpiryTime;
-    private final Random random = new Random();
+    private static int codeExpiryTime = 0;
+    private static final Random random = new Random();
 
-    private DataBase() {
+    private Manager() {
 
-        this.dbType = config.getString("database.type", "mysql");
+        super();
+        dbType = config.getString("database.type", "mysql");
         this.host = config.getString("database.host", "localhost");
         this.port = config.getInt("database.port", 3306);
         this.database = config.getString("database.name", "obsidiangate");
         this.user = config.getString("database.user", "root");
         this.password = config.getString("database.password", "password");
         prefix = config.getString("database.prefix", "OG_");
-        this.sqliteFileName = config.getString("database.sqlite-path", "obsidiangate.db");
+        String sqliteFileName = config.getString("database.sqlite-path", "obsidiangate.db");
         this.sqliteFullPath = new File(plugin.getDataFolder(), sqliteFileName).getAbsolutePath();
-        this.codeExpiryTime = config.getInt("2fa-expiry-time", 300);
+        codeExpiryTime = config.getInt("2fa-expiry-time", 300);
 
         setupDB();
     }
 
-    public static DataBase getInstance() {
+    public static Manager getInstance() {
         if (instance == null) {
-            instance = new DataBase();
+            instance = new Manager();
         }
         return instance;
     }
@@ -66,6 +66,10 @@ public class DataBase extends Base {
             plugin.getLogger().severe("[Database] PLUGIN WILL BE DISABLED DUE TO DB CONNECTION ERROR");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     private void createTablesIfNeeded() {
@@ -100,7 +104,7 @@ public class DataBase extends Base {
         }
     }
 
-    private ResultSet getData(String sql, Object... params) throws SQLException {
+    private static ResultSet getData(String sql, Object... params) throws SQLException {
         PreparedStatement stmt = connection.prepareStatement(sql);
         for (int i = 0; i < params.length; i++) {
             stmt.setObject(i + 1, params[i]);
@@ -108,7 +112,7 @@ public class DataBase extends Base {
         return stmt.executeQuery();
     }
 
-    private void sendData(String sql, Object... params) throws SQLException {
+    private static void sendData(String sql, Object... params) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
                 stmt.setObject(i + 1, params[i]);
@@ -122,18 +126,20 @@ public class DataBase extends Base {
      * @param uuid Player's UUID
      * @return The generated 6-digit code
      */
-    public String generateRegistrationCode(String uuid) {
-        // Generate a random 6-digit code
+    public static String generateRegistrationCode(String uuid) {
+        String existingCode = getExistingCode(uuid);
+        if (existingCode != null) {
+            return existingCode;
+        }
+
         StringBuilder codeBuilder = new StringBuilder();
         for (int i = 0; i < 6; i++) {
             codeBuilder.append(random.nextInt(10));
         }
         String code = codeBuilder.toString();
 
-        // Calculate expiry time (current time + config expiry time in seconds)
         long expiryTime = Instant.now().getEpochSecond() + codeExpiryTime;
 
-        // Store code in database
         String query;
         if ("mysql".equalsIgnoreCase(dbType) || "postgres".equalsIgnoreCase(dbType)) {
             query = "INSERT INTO " + prefix + "registration_codes (uuid, code, expiry_time) VALUES (?, ?, ?) " +
@@ -151,6 +157,21 @@ public class DataBase extends Base {
 
         return code;
     }
+
+    private static String getExistingCode(String uuid) {
+        String query = "SELECT code FROM " + prefix + "registration_codes WHERE uuid = ? LIMIT 1;";
+
+        try (ResultSet resultSet = getData(query, uuid)) {
+            if (resultSet.next()) {
+                return resultSet.getString("code");
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("[Database] Error checking existing registration code: " + e.getMessage());
+        }
+
+        return null;
+    }
+
 
     /**
      * Checks if a registration code is valid
@@ -214,17 +235,14 @@ public class DataBase extends Base {
      * @return True if linking was successful, false otherwise
      */
     public boolean linkPlayerToDiscord(String uuid, String discordId, String code) {
-        // If code is provided, validate it
         if (code != null && !code.isEmpty()) {
             if (!isValidRegistrationCode(uuid, code)) {
                 return false;
             }
 
-            // Remove the code after successful validation
             removeRegistrationCode(uuid);
         }
 
-        // Link the accounts
         String query;
         if ("mysql".equalsIgnoreCase(dbType) || "postgres".equalsIgnoreCase(dbType)) {
             query = "INSERT INTO " + prefix + "linked_accounts (uuid, discord_id) VALUES (?, ?) " +
