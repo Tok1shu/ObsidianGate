@@ -1,8 +1,8 @@
-name: Obsidian Gate
+name: ObsidianGate
 version: '1.0'
 main: net.tokishu.ObsidianGate
 api-version: '1.21'
-prefix: obsidian-gate
+prefix: OG
 authors: [ Tokishu ]
 website: https://tokishu.net
 commands:

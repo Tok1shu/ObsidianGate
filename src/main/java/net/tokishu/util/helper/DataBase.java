@@ -1,30 +1,29 @@
 package net.tokishu.util.helper;
 
-import net.tokishu.ObsidianGate;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.scheduler.BukkitRunnable;
+import net.tokishu.util.Base;
 
+import java.io.File;
 import java.sql.*;
 import java.time.Instant;
 import java.util.Random;
 
-public class DataBase {
+public class DataBase extends Base {
 
     private static DataBase instance;
-    private Connection connection;
+    private static Connection connection;
     private final String dbType;
     private final String host;
     private final String database;
     private final String user;
     private final String password;
-    private final String prefix;
+    private static String prefix = "";
     private final int port;
-    private final String sqlitePath;
+    private final String sqliteFileName;
+    private final String sqliteFullPath;
     private final int codeExpiryTime;
     private final Random random = new Random();
 
     private DataBase() {
-        FileConfiguration config = ObsidianGate.getPluginConfig();
 
         this.dbType = config.getString("database.type", "mysql");
         this.host = config.getString("database.host", "localhost");
@@ -32,8 +31,9 @@ public class DataBase {
         this.database = config.getString("database.name", "obsidiangate");
         this.user = config.getString("database.user", "root");
         this.password = config.getString("database.password", "password");
-        this.prefix = config.getString("database.prefix", "OG_");
-        this.sqlitePath = config.getString("database.sqlite-path", "obsidiangate.db");
+        prefix = config.getString("database.prefix", "OG_");
+        this.sqliteFileName = config.getString("database.sqlite-path", "obsidiangate.db");
+        this.sqliteFullPath = new File(plugin.getDataFolder(), sqliteFileName).getAbsolutePath();
         this.codeExpiryTime = config.getInt("2fa-expiry-time", 300);
 
         setupDB();
@@ -55,11 +55,16 @@ public class DataBase {
                 String url = "jdbc:" + dbType + "://" + host + ":" + port + "/" + database;
                 connection = DriverManager.getConnection(url, user, password);
             } else if ("sqlite".equalsIgnoreCase(dbType)) {
-                connection = DriverManager.getConnection("jdbc:sqlite:" + sqlitePath);
+                connection = DriverManager.getConnection("jdbc:sqlite:" + sqliteFullPath);
+            } else {
+                plugin.getLogger().severe("[Database] Configuration error: The 'database.type' parameter is invalid or missing. Please specify one of the following options: 'mysql', 'postgres', or 'sqlite'.");
+                plugin.getServer().getPluginManager().disablePlugin(plugin);
             }
             createTablesIfNeeded();
         } catch (SQLException e) {
-            System.err.println("[Database] Connection error: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Connection error: " + e.getMessage());
+            plugin.getLogger().severe("[Database] PLUGIN WILL BE DISABLED DUE TO DB CONNECTION ERROR");
+            plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
     }
 
@@ -91,7 +96,7 @@ public class DataBase {
             stmt.executeUpdate(twoFaSessionsTable);
 
         } catch (SQLException e) {
-            System.err.println("[Database] Error creating tables: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error creating tables: " + e.getMessage());
         }
     }
 
@@ -140,7 +145,7 @@ public class DataBase {
         try {
             sendData(query, uuid, code, expiryTime);
         } catch (SQLException e) {
-            System.err.println("[Database] Error generating registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error generating registration code: " + e.getMessage());
             return null;
         }
 
@@ -168,7 +173,7 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error validating registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error validating registration code: " + e.getMessage());
         }
         return false;
     }
@@ -182,7 +187,7 @@ public class DataBase {
         try {
             sendData(query, uuid);
         } catch (SQLException e) {
-            System.err.println("[Database] Error removing registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error removing registration code: " + e.getMessage());
         }
     }
 
@@ -196,7 +201,7 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error getting discord_id: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error getting discord_id: " + e.getMessage());
         }
         return null;
     }
@@ -232,7 +237,7 @@ public class DataBase {
             sendData(query, uuid, discordId);
             return true;
         } catch (SQLException e) {
-            System.err.println("[Database] Error linking player to Discord: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error linking player to Discord: " + e.getMessage());
             return false;
         }
     }
@@ -244,7 +249,7 @@ public class DataBase {
         linkPlayerToDiscord(uuid, discordId, null);
     }
 
-    public boolean isPlayerLinked(String uuid) {
+    public static boolean isPlayerLinked(String uuid) {
         String query = "SELECT discord_id FROM " + prefix + "linked_accounts WHERE uuid = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, uuid);
@@ -252,7 +257,7 @@ public class DataBase {
                 return rs.next();
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error checking if player is linked: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error checking if player is linked: " + e.getMessage());
         }
         return false;
     }
@@ -266,7 +271,7 @@ public class DataBase {
             long currentTime = Instant.now().getEpochSecond();
             sendData(query, currentTime);
         } catch (SQLException e) {
-            System.err.println("[Database] Error cleaning up expired codes: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error cleaning up expired codes: " + e.getMessage());
         }
     }
 
@@ -276,7 +281,7 @@ public class DataBase {
                 connection.close();
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error closing connection: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error closing connection: " + e.getMessage());
         }
     }
 }

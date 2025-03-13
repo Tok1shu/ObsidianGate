@@ -1,14 +1,13 @@
 package net.tokishu.util.helper;
 import net.tokishu.ObsidianGate;
+import net.tokishu.util.Base;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 
-public class Initialization {
-    private static ObsidianGate plugin;
+public class Initialization extends Base {
 
     public static boolean checkConfigIntegrity() {
-        FileConfiguration config = ObsidianGate.getPluginConfig();
 
         List<String> requiredKeys = List.of(
                 "language",
@@ -50,13 +49,13 @@ public class Initialization {
 
         for (String key : requiredKeys) {
             if (!config.contains(key)) {
-                plugin.getLogger().info("Missing key: " + key);
+                plugin.getLogger().info("[Initialization] Missing key: " + key);
                 return false;
             }
 
             String value = config.getString(key);
             if (value == null || value.trim().isEmpty()) {
-                plugin.getLogger().warning("Empty value for key: " + key);
+                plugin.getLogger().warning("[Initialization] Empty value for key: " + key);
             }
         }
 
