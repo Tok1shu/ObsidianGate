@@ -59,7 +59,7 @@ public class Initialization extends Base {
             }
         }
 
-        plugin.getLogger().info("Configuration integrity check passed.");
+        plugin.getLogger().info("[Initialization] Configuration integrity check passed.");
         return true;
     }
 }
