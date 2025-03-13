@@ -1,26 +1,30 @@
-package net.tokishu.event;
+package net.tokishu.event.minecraft.player;
 
+import net.kyori.adventure.text.Component;
 import net.tokishu.util.Base;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import net.tokishu.ObsidianGate;
 import net.tokishu.util.helper.DataBase;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
+public class Join extends Base implements Listener {
 
-public class PlayerJoin extends Base implements Listener {
+    public Join(JavaPlugin plugin) {
+        super(plugin); // Предполагается, что Base принимает плагин
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (config.getBoolean("require-discord-link")) {
             String pUUID = e.getPlayer().getUniqueId().toString();
             if (!DataBase.isPlayerLinked(pUUID)){
-                //TODO: KICK PLAYER
+                Component message = Component.text("Test reason");
+                PlayerKickEvent.Cause cause = PlayerKickEvent.Cause.PLUGIN;
+                e.getPlayer().kick(message, cause);
             }
         }
     }
