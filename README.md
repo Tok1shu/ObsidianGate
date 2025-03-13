@@ -1,8 +1,16 @@
 # Obsidian Gate
 Notes:
- - member - Discord user
- - player - Mineecraft user
- - IF ADDED NEW CONFIG PARAMETER, ADD IT IN TO THE `utill.helper.Initialization`!
+ - member - Дискорд пользователь
+ - player - Майнкрафт пользователь
+ - ЕСЛИ ДОБАВЛЕН ПАРАМЕТР В КОНФИГ, НУЖНО НАКИНУТЬ ЕГО ВАЛИДАЦИЮ В `utill.helper.config.Initialization`!
 
 TODO:
- - CHECK DataBase Helper!
+ - Разбить на ООП хелпер БД
+ - Разбить на ООП Дискорд бота логику
+ - Сделать проверку кода и добавление пользователя после проверки
+ - Сделать выдачу роли верифицированного после проверки кода и добавления в бд
+
+IN FUTURE:
+ - Написать АПИ для этого всего.
+ - Написать образение к АПИ моджангов для смены никнейма игрока
+ - Я хуею у меня мозги кипят.
