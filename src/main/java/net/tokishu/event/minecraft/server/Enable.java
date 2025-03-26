@@ -18,10 +18,19 @@ import static net.tokishu.util.helper.config.Initialization.checkConfigIntegrity
 public class Enable extends Base {
 
     public Enable() {
+        checkOnlineMode();
         initialize();
         registerListeners();
         new Bot().startBot();
         updateLinkedNicknames(connection);
+    }
+
+    private void checkOnlineMode() {
+        if (!plugin.getServer().getOnlineMode()) {
+            plugin.getLogger().severe("[SECURITY] Offline mode detected!");
+            plugin.getLogger().severe("Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
+            plugin.getServer().getPluginManager().disablePlugin(plugin);
+        }
     }
 
     private void initialize() {
