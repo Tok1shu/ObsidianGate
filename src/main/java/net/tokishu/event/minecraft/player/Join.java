@@ -23,7 +23,7 @@ public class Join extends Base implements Listener {
             String pUUID = e.getPlayer().getUniqueId().toString();
             if (!User.isPlayerLinked(connection, pUUID)){
                 String generatedCode = Code.generateRegistrationCode(connection, pUUID, 300);
-                Component message = Component.text("Please send to Hentai#8330 code "+ generatedCode);
+                Component message = Component.text("Please send to "+ getBotTag() +" code "+ generatedCode);
                 PlayerKickEvent.Cause cause = PlayerKickEvent.Cause.PLUGIN;
                 e.getPlayer().kick(message, cause);
             }

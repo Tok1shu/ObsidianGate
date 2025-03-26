@@ -11,6 +11,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+
+import static net.tokishu.command.minecraft.Unlink.updateLinkedNicknames;
 import static net.tokishu.util.helper.config.Initialization.checkConfigIntegrity;
 
 public class Enable extends Base {
@@ -19,6 +21,7 @@ public class Enable extends Base {
         initialize();
         registerListeners();
         new Bot().startBot();
+        updateLinkedNicknames(connection);
     }
 
     private void initialize() {

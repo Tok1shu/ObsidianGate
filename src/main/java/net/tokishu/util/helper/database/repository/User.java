@@ -2,6 +2,10 @@ package net.tokishu.util.helper.database.repository;
 
 import net.tokishu.util.helper.database.Manager;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.tokishu.command.minecraft.Unlink.updateLinkedNicknames;
 
 public class User {
     private static final String PREFIX = Manager.getPrefix();
@@ -90,11 +94,36 @@ public class User {
             stmt.setString(1, uuid);
             stmt.setString(2, discordId);
             stmt.executeUpdate();
+            updateLinkedNicknames(connection);
             return true;
         } catch (SQLException e) {
             System.err.println("[Database] Error linking player to Discord: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Retrieve all linked users with their UUIDs and Discord IDs
+     * @param connection Database connection
+     * @return List of linked users, where each entry is a String array [uuid, discord_id]
+     */
+    public static List<String[]> getAllLinkedUsers(Connection connection) {
+        List<String[]> linkedUsers = new ArrayList<>();
+        String query = "SELECT uuid, discord_id FROM " + PREFIX + "linked_accounts";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String uuid = rs.getString("uuid");
+                String discordId = rs.getString("discord_id");
+                linkedUsers.add(new String[]{uuid, discordId});
+            }
+        } catch (SQLException e) {
+            System.err.println("[Database] Error retrieving linked users: " + e.getMessage());
+        }
+
+        return linkedUsers;
     }
 
     private static String getLinkPlayerQuery() {
@@ -136,6 +165,7 @@ public class User {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, uuid);
             int affectedRows = stmt.executeUpdate();
+            updateLinkedNicknames(connection);
             return affectedRows > 0;
         } catch (SQLException e) {
             System.err.println("[Database] Error unlinking Discord account: " + e.getMessage());

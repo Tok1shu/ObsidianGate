@@ -2,6 +2,7 @@ package net.tokishu.bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -12,7 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class Bot extends Base {
 
     private static Bot instance;
-    private JDA bot;
+    private static JDA bot;
 
     public Bot() {
         instance = this;
@@ -63,12 +64,10 @@ public class Bot extends Base {
         public void onMessageReceived(MessageReceivedEvent event) {
             if (event.getAuthor().isBot()) return;
 
-            if (event.getChannel().getType().isMessage()) {
+            if (event.isFromType(ChannelType.PRIVATE)) {
                 dmHandler.handleDirectMessage(event);
                 return;
             }
-
-            if (event.getAuthor().isBot()) return;
 
             String message = event.getMessage().getContentRaw();
             if (message.equalsIgnoreCase("^ping")) {
@@ -79,5 +78,11 @@ public class Bot extends Base {
 
     public JDA getBot() {
         return bot;
+    }
+    public static String getBotTag() {
+        if (bot != null && bot.getSelfUser() != null) {
+            return bot.getSelfUser().getAsTag();
+        }
+        return "Bot not initialized";
     }
 }

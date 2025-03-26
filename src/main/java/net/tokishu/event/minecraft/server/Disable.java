@@ -8,10 +8,10 @@ public class Disable extends Base {
 
     public Disable() {
         shutdown();
-        new Bot().stopBot();
     }
 
     private void shutdown(){
+        new Bot().stopBot();
         plugin.getLogger().info("Bye :3");
         Manager.close();
     }

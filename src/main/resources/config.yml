@@ -1,3 +1,7 @@
+# ⚠️ IMPORTANT: This plugin only works on licensed servers!
+# It requires 'online-mode' to be enabled, as it relies on UUID tracking.
+# If 'online-mode' is disabled, the plugin will NOT function.
+
 # -------------------------------------------------------
 #          Welcome to the ObsidianGate Config!
 # -------------------------------------------------------
@@ -70,10 +74,10 @@ auto-relink-on-nickname-change: true
 
 # Whitelist Settings
 # Configure how the plugin interacts with your whitelist.
-# Supports vanilla, EasyWhitelist, or a custom command.
+# It will automatically be set to false if the server whitelist is enabled (The vanilla whitelist is already automated and does not require additional automation).
 whitelist:
     enabled: false # Does the plugin manage the whitelist?
-    type: "vanilla" # Options: vanilla, custom
+    type: custom # Options: custom
     add-command: "whitelist add {username}" # Command to add a player (no /)
     remove-command: "whitelist remove {username}" # Command to remove a player (no /)
 
@@ -190,9 +194,12 @@ role-sync:
 # -------------------[Notifications & Logging]-------------------
 # Configure notifications for account events and server activity.
 
-# Notify Discord when a player joins or leaves the server.
+# Notify Discord about failed 2FA authentication attempts.
+# A failed attempt occurs if the user does not confirm within the allocated time
+# or if they disconnect from the server before completing the verification.
 # Default: true
-join-leave-notifications: true
+failed-2fa-notifications: true
+
 
 # Log nickname changes to Discord.
 # Default: true

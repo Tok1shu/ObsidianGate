@@ -2,7 +2,11 @@ name: ObsidianGate
 version: '1.0'
 main: net.tokishu.ObsidianGate
 load: STARTUP
+depend: [ LuckPerms ]
 api-version: '1.21'
 prefix: OG
 authors: [ Tokishu ]
 website: https://tokishu.net
+permissions:
+  obsidian.admin.unlink:
+    default: op
