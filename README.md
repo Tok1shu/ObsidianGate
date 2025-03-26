@@ -19,3 +19,6 @@ IN FUTURE:
 BUGS:
  - ЕСЛИ ПАРАМЕТР `assign-verified-role` = false то мы не проверяем `verified-role-id`
  - ЕСЛИ СЕРВЕР ПИРАТСКИЙ (не `online-mode`) то параметр `auto-relink-on-nickname-change` = FALSE так же и с парметром `whitelist` (УЖЕ НАПИСАЛ ЧЕКЕР ONLINE-мода, осталось применить при иницилизации, я хочу спатки)
+
+POTENTIAL BUGS:
+ - Баля, я понял что у меня бд ореентированна на UUID, если offline мод то вместо uuid стоит использовать ник, но если лицензия то uuid.
