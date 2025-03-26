@@ -5,6 +5,7 @@ import net.tokishu.event.minecraft.player.Join;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import net.tokishu.util.helper.config.ApiKey;
+import net.tokishu.util.helper.database.repository.Code;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,12 +48,10 @@ public class Enable extends Base {
             return;
         }
 
-        Manager database = Manager.getInstance();
-
         new BukkitRunnable() {
             @Override
             public void run() {
-                database.cleanupExpiredCodes();
+                Code.cleanupExpiredCodes(connection);
             }
         }.runTaskTimerAsynchronously(plugin, 20 * 60, 20 * 60 * 3); // 3 минуты
 

@@ -1,10 +1,10 @@
 package net.tokishu.event.minecraft.server;
 
-import net.tokishu.command.Help;
+import net.tokishu.command.minecraft.Help;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
-import net.tokishu.command.Reload;
+import net.tokishu.command.minecraft.Reload;
 
 public class Command extends org.bukkit.command.Command {
 

@@ -14,3 +14,9 @@ IN FUTURE:
  - Написать АПИ для этого всего.
  - Написать образение к АПИ моджангов для смены никнейма игрока
  - Я хуею у меня мозги кипят.
+
+
+BUGS:
+ - ЕСЛИ ПАРАМЕТР `assign-verified-role` = false то мы не проверяем `verified-role-id`
+ - ЕСЛИ СЕРВЕР ПИРАТСКИЙ (не `online-mode`) то параметр `auto-relink-on-nickname-change` = FALSE так же и с парметром `whitelist`
+ - 

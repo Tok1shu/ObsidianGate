@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.tokishu.event.discord.bot.DM;
 import net.tokishu.util.Base;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -32,7 +33,7 @@ public class Bot extends Base {
 
         try {
             bot = JDABuilder.createDefault(token)
-                    .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES)
                     .addEventListeners(new DiscordListener())
                     .build();
 
@@ -56,12 +57,21 @@ public class Bot extends Base {
     }
 
     private static class DiscordListener extends ListenerAdapter {
+        private DM dmHandler = new DM();
+
         @Override
         public void onMessageReceived(MessageReceivedEvent event) {
             if (event.getAuthor().isBot()) return;
 
+            if (event.getChannel().getType().isMessage()) {
+                dmHandler.handleDirectMessage(event);
+                return;
+            }
+
+            if (event.getAuthor().isBot()) return;
+
             String message = event.getMessage().getContentRaw();
-            if (message.equalsIgnoreCase("!ping")) {
+            if (message.equalsIgnoreCase("^ping")) {
                 event.getChannel().sendMessage("Pong!").queue();
             }
         }

@@ -1,4 +1,4 @@
-package net.tokishu.command;
+package net.tokishu.command.minecraft;
 
 import net.tokishu.util.Base;
 import org.bukkit.command.CommandSender;
