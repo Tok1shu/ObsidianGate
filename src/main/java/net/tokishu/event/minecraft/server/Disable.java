@@ -11,7 +11,7 @@ public class Disable extends Base {
     }
 
     private void shutdown(){
-        new Bot().stopBot();
+        // new Bot().stopBot();
         plugin.getLogger().info("Bye :3");
         Manager.close();
     }

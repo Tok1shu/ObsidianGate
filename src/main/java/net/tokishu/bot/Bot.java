@@ -46,8 +46,12 @@ public class Bot extends Base {
 
     public void stopBot() {
         if (bot != null) {
-            bot.shutdown();
-            plugin.getLogger().info("[Bot] Discord bot stopped.");
+            try {
+                bot.shutdownNow();
+                plugin.getLogger().info("[Bot] Discord bot stopped.");
+            } catch (Exception e) {
+                plugin.getLogger().warning("[Bot] Error stopping Discord bot: " + e.getMessage());
+            }
         }
     }
 
