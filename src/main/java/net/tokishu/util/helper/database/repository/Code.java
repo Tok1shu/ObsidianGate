@@ -1,11 +1,12 @@
 package net.tokishu.util.helper.database.repository;
 
+import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import java.sql.*;
 import java.time.Instant;
 import java.util.Random;
 
-public class Code {
+public class Code extends Base {
     private static final Random random = new Random();
     private static final String PREFIX = Manager.getPrefix();
     private static final String DB_TYPE = Manager.getDbType();
@@ -32,7 +33,7 @@ public class Code {
             stmt.setLong(3, expiryTime);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[Database] Error generating registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error generating registration code: " + e.getMessage());
             return null;
         }
 
@@ -67,7 +68,7 @@ public class Code {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error checking existing registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error checking existing registration code: " + e.getMessage());
         }
 
         return null;
@@ -94,7 +95,7 @@ public class Code {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error validating registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error validating registration code: " + e.getMessage());
         }
         return false;
     }
@@ -115,7 +116,7 @@ public class Code {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error getting UUID by code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error getting UUID by code: " + e.getMessage());
         }
         return null;
     }
@@ -131,7 +132,7 @@ public class Code {
             stmt.setString(1, uuid);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[Database] Error removing registration code: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error removing registration code: " + e.getMessage());
         }
     }
 
@@ -146,7 +147,7 @@ public class Code {
             stmt.setLong(1, currentTime);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[Database] Error cleaning up expired codes: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error cleaning up expired codes: " + e.getMessage());
         }
     }
 }

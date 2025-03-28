@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 
-import static net.tokishu.command.minecraft.Unlink.updateLinkedNicknames;
 import static net.tokishu.util.helper.config.Initialization.checkConfigIntegrity;
 
 public class Enable extends Base {
@@ -22,13 +21,13 @@ public class Enable extends Base {
         initialize();
         registerListeners();
         new Bot().startBot();
-        updateLinkedNicknames(connection);
+        updateLinkedNicknamesMap();
     }
 
     private void checkOnlineMode() {
         if (!plugin.getServer().getOnlineMode()) {
             plugin.getLogger().severe("[SECURITY] Offline mode detected!");
-            plugin.getLogger().severe("Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
+            plugin.getLogger().severe("[SECURITY] Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
     }

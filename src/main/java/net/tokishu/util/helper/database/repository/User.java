@@ -1,13 +1,21 @@
 package net.tokishu.util.helper.database.repository;
 
+import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
+import net.tokishu.util.helper.discord.DirectMessage;
+import net.tokishu.util.helper.minecraft.MinecraftAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import static net.tokishu.command.minecraft.Unlink.updateLinkedNicknames;
+import static net.tokishu.util.helper.minecraft.PlayerAction.isPlayerOnline;
+import static net.tokishu.util.helper.minecraft.PlayerAction.kickPlayerWithReason;
 
-public class User {
+public class User extends Base {
     private static final String PREFIX = Manager.getPrefix();
     private static final String DB_TYPE = Manager.getDbType();
 
@@ -27,7 +35,7 @@ public class User {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error getting discord_id: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error getting discord_id: " + e.getMessage());
         }
         return null;
     }
@@ -48,7 +56,7 @@ public class User {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error getting UUID by discord_id: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error getting UUID by discord_id: " + e.getMessage());
         }
         return null;
     }
@@ -67,7 +75,7 @@ public class User {
                 return rs.next();
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error checking if discord_id is linked: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error checking if discord_id is linked: " + e.getMessage());
         }
         return false;
     }
@@ -94,10 +102,10 @@ public class User {
             stmt.setString(1, uuid);
             stmt.setString(2, discordId);
             stmt.executeUpdate();
-            updateLinkedNicknames(connection);
+            updateLinkedNicknamesMap();
             return true;
         } catch (SQLException e) {
-            System.err.println("[Database] Error linking player to Discord: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error linking player to Discord: " + e.getMessage());
             return false;
         }
     }
@@ -120,7 +128,7 @@ public class User {
                 linkedUsers.add(new String[]{uuid, discordId});
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error retrieving linked users: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error retrieving linked users: " + e.getMessage());
         }
 
         return linkedUsers;
@@ -149,7 +157,7 @@ public class User {
                 return rs.next();
             }
         } catch (SQLException e) {
-            System.err.println("[Database] Error checking if player is linked: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error checking if player is linked: " + e.getMessage());
         }
         return false;
     }
@@ -158,17 +166,39 @@ public class User {
      * Unlink a player's Discord account
      * @param connection Database connection
      * @param uuid Player's UUID
+     * @param unlinkedBy Nickname of administrator who unlinked it, if by plugin it should be "null", if by user it should be "they-self"
      * @return True if successfully unlinked, false otherwise
      */
-    public static boolean unlinkDiscord(Connection connection, String uuid) {
+    public static boolean unlinkDiscord(Connection connection, String uuid, String unlinkedBy) {
         String query = "DELETE FROM " + PREFIX + "linked_accounts WHERE uuid = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, uuid);
+            String d_id = getLinkedDiscordId(connection, uuid);
             int affectedRows = stmt.executeUpdate();
-            updateLinkedNicknames(connection);
+            updateLinkedNicknamesMap();
+
+            if (isPlayerOnline(uuid)) {
+                UUID playerUUID = UUID.fromString(uuid);
+                Player player = Bukkit.getPlayer(playerUUID);
+
+                if (unlinkedBy != null) {
+                    kickPlayerWithReason(player, "§cYour account was unlinked with discord by " + unlinkedBy + "!");
+                } else {
+                    kickPlayerWithReason(player, "§cYour account was unlinked with discord!");
+                }
+            } else {
+                if (!"self".equals(unlinkedBy)) {
+                    if (unlinkedBy != null) {
+                        DirectMessage.send(d_id, "Your account was unlinked with discord by " + unlinkedBy + "!");
+                    } else {
+                        DirectMessage.send(d_id, "Your account was unlinked with discord!");
+                    }
+                }
+            }
+
             return affectedRows > 0;
         } catch (SQLException e) {
-            System.err.println("[Database] Error unlinking Discord account: " + e.getMessage());
+            plugin.getLogger().severe("[Database] Error unlinking Discord account: " + e.getMessage());
             return false;
         }
     }

@@ -28,7 +28,7 @@ public class Bot extends Base {
         String token = config.getString("discord-token");
 
         if (token == null || token.isEmpty()) {
-            plugin.getLogger().severe("Discord token is missing! Check config.yml");
+            plugin.getLogger().severe("[Bot] Discord token is missing! Check config.yml");
             return;
         }
 
@@ -80,7 +80,7 @@ public class Bot extends Base {
         }
     }
 
-    public JDA getBot() {
+    public static JDA getBot() {
         return bot;
     }
     public static String getBotTag() {
