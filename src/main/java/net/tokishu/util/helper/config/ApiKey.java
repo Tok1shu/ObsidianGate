@@ -17,14 +17,12 @@ public class ApiKey extends Base {
 
 
     public static String generateApiKey() {
-        byte[] keyBytes = new byte[32]; // 256 бит
+        byte[] keyBytes = new byte[32]; // 256 Bytes
         secureRandom.nextBytes(keyBytes);
         String baseKey = Base64.getUrlEncoder().withoutPadding().encodeToString(keyBytes);
 
-        // Выбираем случайное слово из греческого алфавита
         String greekWord = GREEK_ALPHABET[secureRandom.nextInt(GREEK_ALPHABET.length)].toUpperCase();
 
-        // Формируем финальный ключ
         return "GATE_" + baseKey + "_" + greekWord;
     }
 

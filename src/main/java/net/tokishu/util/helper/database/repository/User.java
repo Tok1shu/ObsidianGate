@@ -189,9 +189,13 @@ public class User extends Base {
             } else {
                 if (!"self".equals(unlinkedBy)) {
                     if (unlinkedBy != null) {
-                        DirectMessage.send(d_id, "Your account was unlinked with discord by " + unlinkedBy + "!");
+                        if (!DirectMessage.send(d_id, "Your account was unlinked with discord by " + unlinkedBy + "!")) {
+                            plugin.getLogger().warning("The message could not be sent. The recipient may not be on the server or have DM's disabled.");
+                        }
                     } else {
-                        DirectMessage.send(d_id, "Your account was unlinked with discord!");
+                        if (!DirectMessage.send(d_id, "Your account was unlinked with discord!")) {
+                            plugin.getLogger().warning("The message could not be sent. The recipient may not be on the server or have DM's disabled.");
+                        }
                     }
                 }
             }

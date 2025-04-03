@@ -26,28 +26,40 @@ public class Command extends org.bukkit.command.Command {
             return true;
         }
 
-        Player player = (Player) sender;
         switch (args[0].toLowerCase()) {
             case "help":
                 Help.sendMessage(sender);
                 break;
             case "reload":
-                if (LP.checkPlayerPermission(player, "obsidian.admin.unlink")) {
-                    Unlink.unlink(sender, args[1]);
-                }else{
-                    sender.sendMessage("§7[§dObsidianGate§7] §cYou do nat permission to do that!");
-                }
-                Reload.plugin(sender);
-                break;
-            case "unlink":
-                if (args.length > 1) {
-                    if (LP.checkPlayerPermission(player, "obsidian.admin.unlink")) {
-                        Unlink.unlink(sender, args[1]);
+                if (isPlayer(sender)){
+                    Player player = (Player) sender;
+                    if (LP.checkPlayerPermission(player, "obsidian.admin.reload")) {
+                        Reload.plugin(sender);
                     }else{
                         sender.sendMessage("§7[§dObsidianGate§7] §cYou do nat permission to do that!");
                     }
+                }else {
+                    Reload.plugin(sender);
+                }
+                break;
+            case "unlink":
+                if (args.length > 1) {
+                    if (isPlayer(sender)){
+                        Player player = (Player) sender;
+                        if (LP.checkPlayerPermission(player, "obsidian.admin.unlink")) {
+                            Unlink.unlink(sender, args[1]);
+                        }else{
+                            sender.sendMessage("§7[§dObsidianGate§7] §cYou do nat permission to do that!");
+                        }
+                    }else {
+                        Unlink.unlink(sender, args[1]);
+                    }
                 } else {
-                    Unlink.unlink(sender);
+                    if (isPlayer(sender)) {
+                        Unlink.unlink(sender);
+                    }else{
+                        sender.sendMessage("HEY! You really need to unlink your account? (-_-)");
+                    }
                 }
                 break;
             default:
@@ -80,5 +92,9 @@ public class Command extends org.bukkit.command.Command {
         }
 
         return List.of();
+    }
+
+    private boolean isPlayer(CommandSender sender){
+        return sender instanceof Player;
     }
 }

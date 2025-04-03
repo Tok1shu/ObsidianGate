@@ -133,9 +133,9 @@ public class Initialization extends Base {
         // These will be checked conditionally
 
         // Notification settings
-        requiredKeysWithValidation.put("join-leave-notifications", new ConfigValidator(
+        requiredKeysWithValidation.put("failed-2fa-notifications", new ConfigValidator(
                 "true|false",
-                "Join leave notifications must be either 'true' or 'false'"
+                "Failed 2FA notifications must be either 'true' or 'false'"
         ));
 
         requiredKeysWithValidation.put("log-nickname-changes", new ConfigValidator(

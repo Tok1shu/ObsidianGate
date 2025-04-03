@@ -16,16 +16,25 @@ import java.util.Map;
 
 public class Base {
     protected static final ObsidianGate plugin = ObsidianGate.getInstance();
-    public static final FileConfiguration config = ObsidianGate.getPluginConfig();
-    protected static final File sqliteFile = new File(plugin.getDataFolder(), config.getString("database.sqlite-path", "obsidiangate.db"));
-    public static Connection connection = Manager.getInstance().getConnection();
+    public static FileConfiguration config = ObsidianGate.getPluginConfig();
+    protected static File sqliteFile;
+    public static Connection connection;
     public static String botTag = null;
 
-    // Static map to store linked users' UUIDs and Minecraft usernames
     protected static Map<String, String> linkedUsersMap = new HashMap<>();
 
     public Base(JavaPlugin plugin) {}
     public Base() {}
+
+    /**
+     * Let’s say NO to incorrect initialization!
+     * "Don't run before your father into the fire~"
+     */
+    public static void initializeConnection() {
+        config = ObsidianGate.getPluginConfig();
+        sqliteFile = new File(plugin.getDataFolder(), config.getString("database.sqlite-path", "obsidiangate.db"));
+        connection = Manager.getInstance().getConnection();
+    }
 
     /**
      * Updates the map of linked Minecraft usernames.
@@ -42,7 +51,6 @@ public class Base {
      * @return Map of UUIDs to Minecraft usernames
      */
     public static Map<String, String> getLinkedUsersMap() {
-        // If the map is empty, try to update it
         if (linkedUsersMap.isEmpty()) {
             updateLinkedNicknamesMap();
         }

@@ -17,22 +17,18 @@ import static net.tokishu.util.helper.config.Initialization.checkConfigIntegrity
 public class Enable extends Base {
 
     public Enable() {
-        checkOnlineMode();
         initialize();
-        registerListeners();
-        new Bot().startBot();
-        updateLinkedNicknamesMap();
     }
 
-    private void checkOnlineMode() {
+    private void initialize() {
+
         if (!plugin.getServer().getOnlineMode()) {
             plugin.getLogger().severe("[SECURITY] Offline mode detected!");
             plugin.getLogger().severe("[SECURITY] Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
+            return;
         }
-    }
 
-    private void initialize() {
         File configFile = new File(plugin.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
             plugin.getLogger().warning("[First start] Configuration file not found! Generating default config...");
@@ -59,12 +55,17 @@ public class Enable extends Base {
             return;
         }
 
+        registerListeners();
+        Base.initializeConnection();
+        updateLinkedNicknamesMap();
+        new Bot().startBot();
+
         new BukkitRunnable() {
             @Override
             public void run() {
                 Code.cleanupExpiredCodes(connection);
             }
-        }.runTaskTimerAsynchronously(plugin, 20 * 60, 20 * 60 * 3); // 3 минуты
+        }.runTaskTimerAsynchronously(plugin, 20 * 60, 20 * 60 * 3); // 3 Minutes
 
         plugin.getLogger().info("ObsidianGate launched successfully!");
     }
