@@ -1,6 +1,7 @@
 package net.tokishu.event.discord.bot;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.tokishu.command.minecraft.Link;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import net.tokishu.util.helper.database.repository.User;
@@ -41,6 +42,7 @@ public class DM extends Base {
                         event.getAuthor().openPrivateChannel().queue(privateChannel ->
                                 privateChannel.sendMessage("✅ Successfully verified! Your Minecraft account has been linked.").queue()
                         );
+                        Link.successfullyLink(playerUuid);
                     } else {
                         event.getAuthor().openPrivateChannel().queue(privateChannel ->
                                 privateChannel.sendMessage("❌ Verification failed. Please try again or contact support.").queue()

@@ -13,7 +13,9 @@ public class Code extends Base {
 
     /**
      * Generates a 6-digit registration code for the player
-     * @param uuid Player's UUID
+     * @param connection DB connection
+     * @param uuid Player's UUID (String)
+     * @param codeExpiryTime Expiry time in seconds (default 300 seconds)
      * @return The generated 6-digit code
      */
     public static String generateRegistrationCode(Connection connection, String uuid, int codeExpiryTime) {

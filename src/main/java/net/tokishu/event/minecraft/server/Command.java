@@ -1,8 +1,10 @@
 package net.tokishu.event.minecraft.server;
 
 import net.tokishu.command.minecraft.Help;
+import net.tokishu.command.minecraft.Link;
 import net.tokishu.command.minecraft.Reload;
 import net.tokishu.command.minecraft.Unlink;
+import net.tokishu.util.helper.database.repository.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +12,9 @@ import net.tokishu.util.helper.minecraft.LP;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.tokishu.util.Base.config;
+import static net.tokishu.util.Base.connection;
 
 public class Command extends org.bukkit.command.Command {
 
@@ -62,6 +67,9 @@ public class Command extends org.bukkit.command.Command {
                     }
                 }
                 break;
+            case "link":
+                Link.link(sender);
+                break;
             default:
                 sender.sendMessage("§7[§dObsidianGate§7] §cUnknown subcommand. Use /obsidian help.");
                 break;
@@ -73,6 +81,7 @@ public class Command extends org.bukkit.command.Command {
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             List<String> availableCommands = new ArrayList<>();
+            Player player = (Player) sender;
 
             availableCommands.add("help");
 
@@ -81,6 +90,11 @@ public class Command extends org.bukkit.command.Command {
             }
 
             availableCommands.add("unlink");
+            if (!User.isPlayerLinked(connection, player.getUniqueId().toString())){
+                if (!config.getBoolean("require-discord-link")){
+                    availableCommands.add("link");
+                }
+            }
 
             return availableCommands;
         }

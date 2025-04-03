@@ -3,7 +3,10 @@ package net.tokishu.command.minecraft;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.repository.User;
 import net.tokishu.util.helper.minecraft.MinecraftAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,5 +57,20 @@ public class Unlink extends Base {
      */
     public static List<String> getLinkedNicknamesCompletion(String partialNickname) {
         return MinecraftAPI.getLinkedNicknamesCompletion(partialNickname);
+    }
+
+    /**
+     * Notify player that's successfully unlinked account
+     * @param uuidStr UUID (String)
+     * @return status is it was successfully sent (if player online)
+     */
+    public static boolean successfullyUnlink(String uuidStr) {
+        Player player = Bukkit.getPlayer(UUID.fromString(uuidStr));
+        if (player != null) {
+            player.sendMessage("§7[§dObsidianGate§7] §cYour account was unlinked!");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+            return true;
+        }
+        return false;
     }
 }
