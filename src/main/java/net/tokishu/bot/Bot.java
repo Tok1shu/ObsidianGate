@@ -34,7 +34,7 @@ public class Bot extends Base {
 
         try {
             bot = JDABuilder.createDefault(token)
-                    .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES)
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS)
                     .addEventListeners(new DiscordListener())
                     .build();
 

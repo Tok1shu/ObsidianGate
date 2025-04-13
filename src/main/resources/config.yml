@@ -83,8 +83,6 @@ verified-role-id: "PASTE VERIFIED ROLE ID HERE"
 # This will ONLY work if 'online-mode' is enabled, as it relies on UUID tracking.
 # When a player's UUID remains the same but their username changes,
 # the plugin will detect the new name and update it in Discord.
-# ⚠️ IMPORTANT: This function works only on licensed servers!
-# It will NOT work if 'online-mode' is set to false.
 # Default: true
 auto-relink-on-nickname-change: true
 
