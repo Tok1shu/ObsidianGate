@@ -10,9 +10,7 @@ import net.tokishu.bot.Bot;
 
 import java.io.File;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Base {
     protected static final ObsidianGate plugin = ObsidianGate.getInstance();
@@ -20,6 +18,7 @@ public class Base {
     protected static File sqliteFile;
     public static Connection connection;
     public static String botTag = null;
+    public static String buildVersion = "CO-250413-0350-P22-V215";
 
     protected static Map<String, String> linkedUsersMap = new HashMap<>();
 
@@ -38,11 +37,34 @@ public class Base {
 
     /**
      * Updates the map of linked Minecraft usernames.
-     * This method can be called periodically or when needed to refresh the linked users.
+     * Performs smart updating by only fetching new usernames from API and removing deleted ones locally.
+     * This reduces API calls by only contacting the API for new entries.
      */
     public static void updateLinkedNicknamesMap() {
-        List<String[]> linkedUsers = User.getAllLinkedUsers(connection);
-        linkedUsersMap = MinecraftAPI.fetchMinecraftUsernames(linkedUsers);
+        List<String[]> currentLinkedUsers = User.getAllLinkedUsers(connection);
+        Set<String> currentUserIds = new HashSet<>();
+        for (String[] userData : currentLinkedUsers) {
+            currentUserIds.add(userData[1]); // Discord ID
+        }
+
+        Set<String> userIdsToRemove = new HashSet<>(linkedUsersMap.keySet());
+        userIdsToRemove.removeAll(currentUserIds);
+
+        for (String userId : userIdsToRemove) {
+            linkedUsersMap.remove(userId);
+        }
+
+        List<String[]> usersToAdd = new ArrayList<>();
+        for (String[] userData : currentLinkedUsers) {
+            if (!linkedUsersMap.containsKey(userData[0])) {
+                usersToAdd.add(userData);
+            }
+        }
+
+        if (!usersToAdd.isEmpty()) {
+            Map<String, String> newUsernames = MinecraftAPI.fetchMinecraftUsernames(usersToAdd);
+            linkedUsersMap.putAll(newUsernames);
+        }
     }
 
     /**

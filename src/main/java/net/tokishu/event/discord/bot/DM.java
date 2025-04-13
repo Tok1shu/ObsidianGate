@@ -28,17 +28,6 @@ public class DM extends Base {
                 if (playerUuid != null) {
                     boolean linkSuccess = User.linkPlayerToDiscord(connection, playerUuid, discordId, message);
                     if (linkSuccess) {
-                        String mainGuildId = plugin.getConfig().getString("main-guild-id");
-                        String verifiedRoleId = plugin.getConfig().getString("verified-role-id");
-
-                        if (mainGuildId != null && verifiedRoleId != null) {
-                            RoleManage.addRoleToUser(
-                                    Long.parseLong(mainGuildId),
-                                    Long.parseLong(discordId),
-                                    Long.parseLong(verifiedRoleId)
-                            );
-                        }
-
                         event.getAuthor().openPrivateChannel().queue(privateChannel ->
                                 privateChannel.sendMessage("✅ Successfully verified! Your Minecraft account has been linked.").queue()
                         );

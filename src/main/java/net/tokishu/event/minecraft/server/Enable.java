@@ -6,6 +6,7 @@ import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import net.tokishu.util.helper.config.ApiKey;
 import net.tokishu.util.helper.database.repository.Code;
+import net.tokishu.util.helper.minecraft.PluginVersion;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,8 +24,8 @@ public class Enable extends Base {
     private void initialize() {
 
         if (!plugin.getServer().getOnlineMode()) {
-            plugin.getLogger().severe("[SECURITY] Offline mode detected!");
-            plugin.getLogger().severe("[SECURITY] Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
+            plugin.getLogger().severe("Offline mode detected!");
+            plugin.getLogger().severe("Plugin functionality requires online-mode due to UUID-based identification and specific features incompatible with offline servers.");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
@@ -49,6 +50,7 @@ public class Enable extends Base {
             return;
         }
 
+
         FileConfiguration config = plugin.getConfig();
 
         if (!checkConfigIntegrity()) {
@@ -57,6 +59,7 @@ public class Enable extends Base {
 
         registerListeners();
         Base.initializeConnection();
+        new PluginVersion();
         updateLinkedNicknamesMap();
         new Bot().startBot();
 

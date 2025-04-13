@@ -16,6 +16,23 @@
 # Happy customizing!
 # -------------------------------------------------------
 
+# -------------------[Plugin Build Version]-------------------
+# DO NOT CHANGE THIS LINE!
+# Format:
+# [TYPE]-[YYMMDD]-[HHMM]-[Pxx]-[Vzzz]-[xxx]
+#
+# TYPE   : Build type/stage (CO = Crying Obsidian — development build)
+# YYMMDD : Build date (25 = year 2025, 04 = April, 13 = day)
+# HHMM   : Build time in 24-hour format (03:50 AM) (Prague time)
+# Pxx    : Number of parameters included in this build (P22 = 22 parameters)
+# Vzzz   : Target version the plugin is built for (V215 = version 1.21.5)
+#
+# Example:
+# CO-250413-0350-P22-V215
+# → Dev build made on April 13, 2025 at 03:50 AM
+# → Contains 22 parameters, built for version 1.21.5
+build: CO-250413-0350-P22-V215
+
 
 # -------------------[Language Settings]-------------------
 # The language used by the plugin.
@@ -204,6 +221,7 @@ failed-2fa-notifications: true
 # Log nickname changes to Discord.
 # Default: true
 log-nickname-changes: true
+
 
 # -------------------------------------------------------
 #                    End of Configuration

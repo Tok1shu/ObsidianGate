@@ -3,6 +3,7 @@ package net.tokishu.util.helper.database.repository;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import net.tokishu.util.helper.discord.DirectMessage;
+import net.tokishu.util.helper.discord.RoleManage;
 import net.tokishu.util.helper.minecraft.MinecraftAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -103,6 +104,19 @@ public class User extends Base {
             stmt.setString(2, discordId);
             stmt.executeUpdate();
             updateLinkedNicknamesMap();
+
+            String d_id = getLinkedDiscordId(connection, uuid);
+            String mainGuildId = plugin.getConfig().getString("main-guild-id");
+            String verifiedRoleId = plugin.getConfig().getString("verified-role-id");
+
+            if (mainGuildId != null && verifiedRoleId != null) {
+                RoleManage.addRoleToUser(
+                        Long.parseLong(mainGuildId),
+                        Long.parseLong(d_id),
+                        Long.parseLong(verifiedRoleId)
+                );
+            }
+
             return true;
         } catch (SQLException e) {
             plugin.getLogger().severe("[Database] Error linking player to Discord: " + e.getMessage());
@@ -176,6 +190,16 @@ public class User extends Base {
             String d_id = getLinkedDiscordId(connection, uuid);
             int affectedRows = stmt.executeUpdate();
             updateLinkedNicknamesMap();
+
+            String mainGuildId = plugin.getConfig().getString("main-guild-id");
+            String verifiedRoleId = plugin.getConfig().getString("verified-role-id");
+            if (mainGuildId != null && verifiedRoleId != null) {
+                RoleManage.removeRoleFromUser(
+                        Long.parseLong(mainGuildId),
+                        Long.parseLong(d_id),
+                        Long.parseLong(verifiedRoleId)
+                );
+            }
 
             if (isPlayerOnline(uuid)) {
                 UUID playerUUID = UUID.fromString(uuid);
