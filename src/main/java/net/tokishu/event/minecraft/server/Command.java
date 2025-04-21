@@ -1,9 +1,6 @@
 package net.tokishu.event.minecraft.server;
 
-import net.tokishu.command.minecraft.Help;
-import net.tokishu.command.minecraft.Link;
-import net.tokishu.command.minecraft.Reload;
-import net.tokishu.command.minecraft.Unlink;
+import net.tokishu.command.minecraft.*;
 import net.tokishu.util.helper.database.repository.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -69,6 +66,9 @@ public class Command extends org.bukkit.command.Command {
                 break;
             case "link":
                 Link.link(sender);
+                break;
+            case "test":
+                Test.test(sender);
                 break;
             default:
                 sender.sendMessage("§7[§dObsidianGate§7] §cUnknown subcommand. Use /obsidian help.");

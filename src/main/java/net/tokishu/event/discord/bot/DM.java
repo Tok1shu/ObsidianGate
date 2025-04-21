@@ -49,7 +49,7 @@ public class DM extends Base {
         else if (message.equalsIgnoreCase("unlink")) {
             String linkedUuid = User.getLinkedUuid(connection, discordId);
             if (linkedUuid != null) {
-                boolean unlinked = User.unlinkDiscord(connection, linkedUuid, "self");
+                boolean unlinked = User.unlinkDiscord(connection, linkedUuid, null);
                 if (unlinked) {
                     event.getAuthor().openPrivateChannel().queue(privateChannel ->
                             privateChannel.sendMessage("Your Minecraft account has been unlinked.").queue()

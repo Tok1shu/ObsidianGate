@@ -132,4 +132,42 @@ public class MinecraftAPI extends Base {
                 .filter(nickname -> nickname.toLowerCase().startsWith(partialNickname.toLowerCase()))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Fetches Minecraft username for a specific UUID using Mojang's session server API.
+     *
+     * @param uuid The UUID of the Minecraft player
+     * @return The username associated with the UUID, or null if not found or an error occurs
+     */
+    public static String getMinecraftUsername(String uuid) {
+        try {
+            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                JsonObject profileData = new Gson().fromJson(response.toString(), JsonObject.class);
+                return profileData.get("name").getAsString();
+            } else {
+                plugin.getLogger().warning(String.format("[MinecraftAPI] Failed to fetch username for UUID: %s (Response code: %d)",
+                        uuid, responseCode));
+                return null;
+            }
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.SEVERE,
+                    String.format("[MinecraftAPI] Error fetching username for UUID %s", uuid),
+                    e);
+            return null;
+        }
+    }
 }

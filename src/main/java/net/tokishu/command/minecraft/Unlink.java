@@ -2,6 +2,7 @@ package net.tokishu.command.minecraft;
 
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.repository.User;
+import net.tokishu.util.helper.discord.BotManage;
 import net.tokishu.util.helper.minecraft.MinecraftAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -46,7 +47,7 @@ public class Unlink extends Base {
      * @param sender The command sender
      */
     public static void unlink(CommandSender sender) {
-        sender.sendMessage("§7[§dObsidianGate§7] §eTo unlink your account, send 'unlink' to §a" + getBotTag() + "§e in private messages.");
+        sender.sendMessage("§7[§dObsidianGate§7] §eTo unlink your account, send 'unlink' to §a" + BotManage.getBotTag() + "§e in private messages.");
     }
 
     /**

@@ -18,7 +18,7 @@ public class Base {
     protected static File sqliteFile;
     public static Connection connection;
     public static String botTag = null;
-    public static String buildVersion = "CO-250413-0350-P22-V215";
+    public static String buildVersion = "CO-250421-2136-P24-V215";
 
     protected static Map<String, String> linkedUsersMap = new HashMap<>();
 
@@ -77,15 +77,5 @@ public class Base {
             updateLinkedNicknamesMap();
         }
         return linkedUsersMap;
-    }
-
-    public static String getBotTag() {
-        if (botTag == null) {
-            Bot bot = Bot.getInstance();
-            if (bot != null && bot.getBot() != null) {
-                botTag = bot.getBot().getSelfUser().getAsTag();
-            }
-        }
-        return botTag != null ? botTag : "Bot not initialized";
     }
 }

@@ -27,13 +27,13 @@ public class RoleManage extends Base {
                 return false;
             }
 
-            Member member = guild.getMemberById(userId);
-            Role role = guild.getRoleById(roleId);
-
-            if (member == null) {
+            if (!MemberManage.isMemberOfGuild(guildId, userId)) {
                 plugin.getLogger().warning("[RoleManage] Discord user not found: " + userId);
                 return false;
             }
+
+            Member member = guild.retrieveMemberById(userId).complete();
+            Role role = guild.getRoleById(roleId);
 
             if (role == null) {
                 plugin.getLogger().warning("[RoleManage] Unexpected error: " + roleId);
@@ -72,13 +72,13 @@ public class RoleManage extends Base {
                 return false;
             }
 
-            Member member = guild.getMemberById(userId);
-            Role role = guild.getRoleById(roleId);
-
-            if (member == null) {
+            if (!MemberManage.isMemberOfGuild(guildId, userId)) {
                 plugin.getLogger().warning("[RoleManage] Discord user not found: " + userId);
                 return false;
             }
+
+            Member member = guild.retrieveMemberById(userId).complete();
+            Role role = guild.getRoleById(roleId);
 
             if (role == null) {
                 plugin.getLogger().warning("[RoleManage] Role not found: " + roleId);
@@ -117,10 +117,14 @@ public class RoleManage extends Base {
                 return false;
             }
 
-            Member member = guild.getMemberById(userId);
+            if (!MemberManage.isMemberOfGuild(guildId, userId)) {
+                return false;
+            }
+
+            Member member = guild.retrieveMemberById(userId).complete();
             Role role = guild.getRoleById(roleId);
 
-            if (member == null || role == null) {
+            if (role == null) {
                 return false;
             }
 

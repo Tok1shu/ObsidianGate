@@ -101,6 +101,22 @@ whitelist:
 # Default: false
 require-discord-link: false
 
+# Discord Presence Requirement
+# Should players be required to be in the Discord main guild?
+# Default: true
+require-discord-presence: true
+
+# Ban Synchronization
+# Synchronize player bans in the main guild
+# ⚠ The ban does not apply to member servers unless configured by an external guild administrator.
+# The parameter does not interact in any way with already banned players!
+# Options:
+#  false - disable synchronization
+#  two-way - two-way synchronization (Discord ban = Minecraft ban and vice versa)
+#  discord-to-mc - only from Discord to Minecraft
+#  mc-to-discord - only from Minecraft to Discord
+# Default: false
+ban-synchronization: false
 
 # -------------------[Security & 2FA]-------------------
 # Secure logins with two-factor authentication.

@@ -3,9 +3,11 @@ package net.tokishu.util.helper.database.repository;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.Manager;
 import net.tokishu.util.helper.discord.DirectMessage;
+import net.tokishu.util.helper.discord.NicknameManage;
 import net.tokishu.util.helper.discord.RoleManage;
 import net.tokishu.util.helper.minecraft.MinecraftAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -117,6 +119,8 @@ public class User extends Base {
                 );
             }
 
+            NicknameManage.syncMinecraftNickname(config.getLong("main-guild-id"), uuid);
+
             return true;
         } catch (SQLException e) {
             plugin.getLogger().severe("[Database] Error linking player to Discord: " + e.getMessage());
@@ -205,10 +209,28 @@ public class User extends Base {
                 UUID playerUUID = UUID.fromString(uuid);
                 Player player = Bukkit.getPlayer(playerUUID);
 
-                if (unlinkedBy != null) {
-                    kickPlayerWithReason(player, "§cYour account was unlinked with discord by " + unlinkedBy + "!");
-                } else {
-                    kickPlayerWithReason(player, "§cYour account was unlinked with discord!");
+                if (config.getBoolean("require-discord-link")) {
+                    if (unlinkedBy != null) {
+                        kickPlayerWithReason(player, "§cYour account was unlinked with discord by " + unlinkedBy + "!");
+                    } else {
+                        kickPlayerWithReason(player, "§cYour account was unlinked with discord!");
+                    }
+                }else {
+                    if (unlinkedBy != null) {
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1.0f);
+
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.7f);
+                        }, 6L); // 0.3 seconds
+                        player.sendMessage("§7[§dObsidianGate§7] §cYour account was unlinked with discord by " + unlinkedBy + "!");
+                    } else {
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1.0f);
+
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.7f);
+                        }, 6L); // 0.3 seconds
+                        player.sendMessage("§7[§dObsidianGate§7] §cYour account was unlinked with discord!");
+                    }
                 }
             } else {
                 if (!"self".equals(unlinkedBy)) {
@@ -224,6 +246,7 @@ public class User extends Base {
                 }
             }
 
+            NicknameManage.syncMinecraftNickname(config.getLong("main-guild-id"), uuid);
             return affectedRows > 0;
         } catch (SQLException e) {
             plugin.getLogger().severe("[Database] Error unlinking Discord account: " + e.getMessage());

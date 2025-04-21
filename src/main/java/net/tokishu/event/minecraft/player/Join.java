@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.repository.Code;
 import net.tokishu.util.helper.database.repository.User;
+import net.tokishu.util.helper.discord.BotManage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public class Join extends Base implements Listener {
 
             if (!User.isPlayerLinked(connection, pUUID)) {
                 String generatedCode = Code.generateRegistrationCode(connection, pUUID, 300);
-                Component message = Component.text("Please send to " + getBotTag() + " code " + generatedCode);
+                Component message = Component.text("Please send to " + BotManage.getBotTag() + " code " + generatedCode);
                 kickedPlayers.add(uuid);
                 e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, message);
             }

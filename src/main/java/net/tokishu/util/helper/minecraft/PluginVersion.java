@@ -42,8 +42,6 @@ public class PluginVersion extends Base {
         String configVersion = config.getString("build", "");
 
         logger.info("[PluginVersion] Checking plugin version...");
-        logger.info("[PluginVersion] Code version: " + codeVersion);
-        logger.info("[PluginVersion] Config version: " + configVersion);
 
         VersionInfo codeVersionInfo = parseVersion(codeVersion);
         VersionInfo configVersionInfo = parseVersion(configVersion);
@@ -137,6 +135,9 @@ public class PluginVersion extends Base {
             FileConfiguration oldConfig = null;
             if (configFile.exists()) {
                 oldConfig = YamlConfiguration.loadConfiguration(configFile);
+                if (!configFile.delete()){
+                    logger.severe("[PluginVersion] error while deleting old config file!");
+                }
             }
 
             // 3. Generate new default config
@@ -159,7 +160,7 @@ public class PluginVersion extends Base {
             // 7. Check for parameter count changes
             if (codeInfo.parameterCount > configInfo.parameterCount) {
                 int newParamsCount = codeInfo.parameterCount - configInfo.parameterCount;
-                logger.info(ChatColor.GREEN + "Plugin update added " + newParamsCount + " new parameter(s)");
+                logger.info("[PluginVersion] Plugin update added " + newParamsCount + " new parameter(s)");
 
                 findNewParameters(newConfig, oldConfig, "");
             }

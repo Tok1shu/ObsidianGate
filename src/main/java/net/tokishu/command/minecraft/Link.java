@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.shorts.ShortRBTreeSet;
 import net.tokishu.util.Base;
 import net.tokishu.util.helper.database.repository.Code;
 import net.tokishu.util.helper.database.repository.User;
+import net.tokishu.util.helper.discord.BotManage;
 import net.tokishu.util.helper.minecraft.PlayerAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -28,8 +29,8 @@ public class Link extends Base {
         Player player = (Player) sender;
         if (!User.isPlayerLinked(connection, player.getUniqueId().toString())){
             String code = Code.generateRegistrationCode(connection, player.getUniqueId().toString(), 300);
-            sender.sendMessage("§7[§dObsidianGate§7] §ePlease, send code §a" + code + " §eto the discord bot §a" + getBotTag());
-            player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            sender.sendMessage("§7[§dObsidianGate§7] §ePlease, send code §a" + code + " §eto the discord bot §a" + BotManage.getBotTag());
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.5f);
         }else{
             sender.sendMessage("§7[§dObsidianGate§7] §cYou are already linked to a Discord account.");
         }
@@ -44,7 +45,10 @@ public class Link extends Base {
         Player player = Bukkit.getPlayer(UUID.fromString(uuidStr));
         if (player != null) {
             player.sendMessage("§7[§dObsidianGate§7] §aYour account was successfully linked!");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1.0f);
+            }, 6L); // 0.3 seconds
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.7f);
             return true;
         }
         return false;

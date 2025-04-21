@@ -74,6 +74,16 @@ public class Initialization extends Base {
                 "Require Discord link must be either 'true' or 'false'"
         ));
 
+        requiredKeysWithValidation.put("require-discord-presence", new ConfigValidator(
+                "true|false",
+                "Require Discord Presence must be either 'true' or 'false'"
+        ));
+
+        requiredKeysWithValidation.put("ban-synchronization", new ConfigValidator(
+                "^(false|two-way|discord-to-mc|mc-to-discord)$",
+                "ban-synchronization must be one of: 'false', 'two-way', 'discord-to-mc', 'mc-to-discord'"
+        ));
+
         requiredKeysWithValidation.put("enable-2fa", new ConfigValidator(
                 "true|false",
                 "Enable 2FA must be either 'true' or 'false'"
@@ -241,24 +251,24 @@ public class Initialization extends Base {
             }
         }
 
-        // Special checks for values that might still contain placeholder text
-        String token = config.getString("discord-token", "");
-        if (token.equals("PASTE TOKEN HERE")) {
-            plugin.getLogger().severe("[Initialization] Discord token is still set to default value 'PASTE TOKEN HERE'. Please set a valid token.");
-            isValid = false;
-        }
-
-        String guildId = config.getString("main-guild-id", "");
-        if (guildId.equals("PASTE MAIN GUILD ID HERE")) {
-            plugin.getLogger().severe("[Initialization] Main guild ID is still set to default value 'PASTE MAIN GUILD ID HERE'. Please set a valid Discord guild ID.");
-            isValid = false;
-        }
-
-        String roleId = config.getString("verified-role-id", "");
-        if (roleId.equals("PASTE VERIFIED ROLE ID HERE")) {
-            plugin.getLogger().severe("[Initialization] Verified role ID is still set to default value 'PASTE VERIFIED ROLE ID HERE'. Please set a valid Discord role ID.");
-            isValid = false;
-        }
+//        // Special checks for values that might still contain placeholder text
+//        String token = config.getString("discord-token", "");
+//        if (token.equals("PASTE TOKEN HERE")) {
+//            plugin.getLogger().severe("[Initialization] Discord token is still set to default value 'PASTE TOKEN HERE'. Please set a valid token.");
+//            isValid = false;
+//        }
+//
+//        String guildId = config.getString("main-guild-id", "");
+//        if (guildId.equals("PASTE MAIN GUILD ID HERE")) {
+//            plugin.getLogger().severe("[Initialization] Main guild ID is still set to default value 'PASTE MAIN GUILD ID HERE'. Please set a valid Discord guild ID.");
+//            isValid = false;
+//        }
+//
+//        String roleId = config.getString("verified-role-id", "");
+//        if (roleId.equals("PASTE VERIFIED ROLE ID HERE")) {
+//            plugin.getLogger().severe("[Initialization] Verified role ID is still set to default value 'PASTE VERIFIED ROLE ID HERE'. Please set a valid Discord role ID.");
+//            isValid = false;
+//        }
 
 //        String apiKey = config.getString("api-key", "");
 //        if (apiKey.equals("GENERATE_KEY_HERE")) {
