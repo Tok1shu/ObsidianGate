@@ -26,6 +26,7 @@ BUGS:
  - Если игрока разлинковали пока параметр `require-discord-link=false`, тогда нельзя кикать игрока.
  - Не работает команда /obsidian reload
  - Пофикскить `NicnameManage`
+ - God class
 
 POTENTIAL BUGS:
  - ЕСЛИ ПАРАМЕТР `assign-verified-role` = false то мы не проверяем `verified-role-id`
